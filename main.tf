@@ -59,14 +59,20 @@ resource "aws_iam_role_policy_attachment" "eks-ebs-policy_custom-attachment" {
 provider "kubernetes" {
   host                   = data.aws_eks_cluster.example.endpoint
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.example.certificate_authority[0].data)
-
-  exec {
-    api_version = "client.authentication.k8s.io/v1"
-    command     = "aws"
-    # This requires the awscli to be installed locally where Terraform is executed
-    args = ["eks", "get-token", "--cluster-name", data.aws_eks_cluster.example.id]
-  }
+  token                  = data.aws_eks_cluster_auth.clutertoken.token
 }
+
+# provider "kubernetes" {
+#   host                   = data.aws_eks_cluster.example.endpoint
+#   cluster_ca_certificate = base64decode(data.aws_eks_cluster.example.certificate_authority[0].data)
+
+#   exec {
+#     api_version = "client.authentication.k8s.io/v1"
+#     command     = "aws"
+#     # This requires the awscli to be installed locally where Terraform is executed
+#     args = ["eks", "get-token", "--cluster-name", data.aws_eks_cluster.example.id]
+#   }
+# }
 
 # resource "kubernetes_annotations" "ebs_annotate" {
 #   api_version = "v1"
