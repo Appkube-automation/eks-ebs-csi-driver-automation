@@ -86,6 +86,11 @@ provider "kubernetes" {
 #   }
 # }
 
+resource "null_resource" "checkcluster" {
+  provisioner "local-exec" {
+    command = "kubectl config view"
+  }
+}
 
 resource "null_resource" "clustert" {
   provisioner "local-exec" {
